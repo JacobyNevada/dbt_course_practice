@@ -1,6 +1,8 @@
 {{
     config(
-        materialized = 'table',
+        materialized = 'incremental',
+        incremental_strategy = "merge",
+        unique_key = ["book_ref"],
         tags = ['bookings']
     )
 }}
@@ -12,5 +14,5 @@ from
     {{ source('demo_src', 'bookings') }}
 {% if is_incremental() %}
 where
-    book_ref > (select max(book_ref) from {{ this }})
+    book_date > current_date - interval '7 days' 
 {% endif %}
