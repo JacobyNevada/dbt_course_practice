@@ -14,3 +14,6 @@ from
 where
     book_ref > (select max(book_ref) from {{ this }})
 {% endif %}
+{#{%- if target.name == 'dev' %}
+limit 10000
+{%- endif %}#}
